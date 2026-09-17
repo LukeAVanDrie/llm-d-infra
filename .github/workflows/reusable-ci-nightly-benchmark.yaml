@@ -911,7 +911,7 @@ jobs:
           lkcmd="yq -i \".scenario[0].kustomize.acceleratorBackend = \\\"$LLMDBENCH_CICD_BACKEND_ACCELERATOR\\\"\" $LLMDBENCH_CICD_SCENARIO_FILE"
           echo -n "; $lkcmd" >> "$LLMDBENCH_CICD_CMD_LOG"
           eval "$lkcmd"
-          cat $LLMDBENCH_CICD_SCENARIO_FILE | yq -r .scenario[].kustomize
+          yq -r .scenario[].kustomize "$LLMDBENCH_CICD_SCENARIO_FILE"
         shell: bash
 
       - name: Set harness executable
