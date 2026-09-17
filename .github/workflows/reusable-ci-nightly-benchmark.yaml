@@ -943,6 +943,9 @@ jobs:
             detected_model=$(kubectl kustomize "$LLMDBENCH_CICD_KUSTOMIZE_PATH" | yq .spec.leaderWorkerTemplate.workerTemplate.spec.containers[0].args | sed 's^--model-path=^^g' | grep -Ev "\- \--|\- '|\---|\- \||    \--|.*exec vllm|'|null|#|\"|find|START_RANK" | sed -e 's^ ^^g' -e 's|^-||g' -e 's^\\^^g' -e '/^$/d' | uniq || true)
           fi
           if [[ -z $detected_model ]]; then
+            detected_model=$(kubectl kustomize "$LLMDBENCH_CICD_KUSTOMIZE_PATH" | yq .spec.roles[].spec.leaderWorkerTemplate.workerTemplate.spec.containers[0].args | sed 's^--model-path=^^g' | grep -Ev "\- \--|\- '|\---|\- \||    \--|.*exec vllm|'|null|#|\"|find|START_RANK" | sed -e 's^ ^^g' -e 's|^-||g' -e 's^\\^^g' -e '/^$/d' | uniq || true)
+          fi
+          if [[ -z $detected_model ]]; then
             echo "### ERROR: unable to detect model"
             exit 1
           fi
